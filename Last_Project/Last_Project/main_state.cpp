@@ -12,10 +12,10 @@
 #define VIEW_MAP    22222221
 
 #define TITLE 8321783
-#define STAGE1 8321783
-#define STAGE2 8321784
-#define STAGE3 8321785
-#define END	8321786
+#define STAGE1 8321784
+#define STAGE2 8321785
+#define STAGE3 8321786
+#define FINISH	83217
 
 
 
@@ -30,6 +30,7 @@ int cur_state;
 
 Player Player1;
 
+//첫번째 맵 변수
 int map1[10][10] = { 1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
@@ -41,18 +42,15 @@ int map1[10][10] = { 1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					0, 0, 0, 1, 0, 0, 1, 0, 1, 0 };
 
-
 Wall Walls1[100];
 int Wall1Num = 0;
+
+
+
 
 //글로벌 조명 설정용 변수
 GLfloat GlobalAmbientLight[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-//조명 0 설정용 변수
-GLfloat AmbientLight0[] = { 0.2f, 0.2f, 0.2f, 0.0f };
-GLfloat DiffuseLight0[] = { 0.7, 0.7, 0.7, 1.0f };
-GLfloat SpecularLight0[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat LightPos0[] = { 0, 0, 0, 1.0 };
 
 //조명 0 설정용 변수
 GLfloat AmbientLight1[] = { 0.2f, 0.2f, 0.2f, 0.0f };
@@ -89,7 +87,7 @@ void initialize()
 		for (int j = 0; j < 10; j++)
 		{
 			if (map1[i][j] == 1){
-				Walls1[Wall1Num].insertPos(Point3d(j * 10, 0, (i - 9) * 10));
+				Walls1[Wall1Num].insertPos(Point3d(j * 10 +5, 0, (i - 9) * 10 - 5));
 				Walls1[Wall1Num].insertSize(Point3d(10, 10, 10));
 
 				Wall1Num++;
@@ -134,7 +132,7 @@ GLvoid drawScene(GLvoid)
 
 	else if (ViewMode == VIEW_MAP){
 
-		gluLookAt(50, 100.0, -50, 49, -1, -50, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
+		gluLookAt(50, 100.0, -50, 51, -1, -50, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
 		glPushMatrix();
 
 	}
@@ -155,7 +153,7 @@ GLvoid drawScene(GLvoid)
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);               //재질 속성 설정(물체 색 효과 설정)
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);                  //하이라이트 색깔
 	glMateriali(GL_FRONT, GL_SHININESS, 64);                     //하이라이트 계수
-	glShadeModel(GL_FLAT);                                 //부드러운 쉐이딩
+	glShadeModel(GL_FLAT);                                 //딱딱한 쉐이딩
 
 	//은면 제거, 컬링 설정
 	glEnable(GL_DEPTH_TEST);                                 //은면 제거 
@@ -182,17 +180,44 @@ GLvoid drawScene(GLvoid)
 	glPopMatrix();
 
 
-	glColor3f(0, 0, 1);
-	for (int i = 0; i < Wall1Num; i++)
+	if (cur_state = TITLE)
 	{
-		Walls1[i].draw();
+
+	}
+	if (cur_state = STAGE1)
+	{
+		glColor3f(1, 0, 0);
+		Player1.draw();
+		glColor3f(0, 0, 1);
+		for (int i = 0; i < Wall1Num; i++)
+		{
+			Walls1[i].draw();
+		}
 	}
 
+	if (cur_state = STAGE2)
+	{
+		glColor3f(0, 0, 1);
+		for (int i = 0; i < Wall1Num; i++)
+		{
+			//Walls2[i].draw();
+		}
+	}
 
-	glColor3f(1, 0, 0);
-	glPushMatrix();
-		glTranslated(LightPos0[0], LightPos0[1], LightPos0[2]);
-		glutSolidCube(1);
+	if (cur_state = STAGE3)
+	{
+		glColor3f(0, 0, 1);
+		for (int i = 0; i < Wall1Num; i++)
+		{
+			//Walls3[i].draw();
+		}
+	}
+
+	if (cur_state = FINISH)
+	{
+		
+	}
+
 
 	glPopMatrix();
 
@@ -214,19 +239,48 @@ GLvoid Reshape(int w, int h)
 
 GLvoid Keyboard(unsigned char key, int x, int y)
 {
-	Player1.Move(key);
-	Player1.ChangeViewPoint(key);
+
+	if (ViewMode == PLAY){
+		Player1.Move(key);
+		Player1.ChangeViewPoint(key);
+	}
 	
-	bool wall_crush;
-	for (int i = 0; i < Wall1Num; i++)
+	if (cur_state == STAGE1)
 	{
-		wall_crush = Player1.CrushWithWall(Walls1[i].returnHitBox());
-		if (wall_crush)
-			break;
+		bool wall_crush;
+		for (int i = 0; i < Wall1Num; i++)
+		{
+			wall_crush = Player1.CrushWithWall(Walls1[i].returnHitBox());
+			if (wall_crush)
+				break;
+		}
+
 	}
 
-	cout << Player1.returnViewPoint().x << endl;
-	cout << Player1.returnViewPoint().z << endl;
+	if (cur_state == STAGE2)
+	{
+		bool wall_crush;
+		for (int i = 0; i < Wall1Num; i++)
+		{
+			wall_crush = Player1.CrushWithWall(Walls1[i].returnHitBox());
+			if (wall_crush)
+				break;
+		}
+
+	}
+
+
+	if (cur_state == STAGE3)
+	{
+		bool wall_crush;
+		for (int i = 0; i < Wall1Num; i++)
+		{
+			wall_crush = Player1.CrushWithWall(Walls1[i].returnHitBox());
+			if (wall_crush)
+				break;
+		}
+
+	}
 
 	if (key == 'q')
 	{

@@ -1,6 +1,7 @@
 #include<iostream>
 #include "Player.h"
 #include "MyStructs.h"
+#include <glut.h>
 
 void Player::insertEye(Point3d _Eye){	Eye = _Eye; }
 void Player::insertViewPoint(Point3d _ViewPoint) { ViewPoint = _ViewPoint; }
@@ -126,6 +127,17 @@ bool Player::CrushWithEndPoint(HitBox EndPointHitBox)
 	}
 
 	return EndPoint_crush;
+
+}
+
+
+
+void Player::draw()
+{
+	glPushMatrix();
+	glTranslated(Eye.x, Eye.y, Eye.z);
+	glutSolidSphere(1, 32, 32);
+	glPopMatrix();
 
 }
 

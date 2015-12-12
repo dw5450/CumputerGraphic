@@ -31,6 +31,7 @@ public:
 	void ChangeViewPoint(char key);
 	bool CrushWithWall(HitBox WallHitBox);
 	bool CrushWithEndPoint(HitBox EndPointHitBox);
+	void draw();
 
 };
 
