@@ -14,20 +14,22 @@ class Player
 {
 private:
 	Point3d Eye;
-	Point3d ViewPoint;	
+	Point3d ViewPoint;
+	Point3d oldEye;
+	int HitBoxSize;
 	int CameraTotalAngle = 0;
 	int ViewMode = VIEWFRONT;
 
 public:
 	Player(){};
-	Player(Point3d _Eye, Point3d _ViewPoint) : Eye(_Eye), ViewPoint(_ViewPoint){}
+	Player(Point3d _Eye, Point3d _ViewPoint) : Eye(_Eye), ViewPoint(_ViewPoint){ HitBoxSize = 0; }
 	void insertEye(Point3d _Eye);
 	void insertViewPoint(Point3d _ViewPoint);
 	Point3d returnEye();
 	Point3d returnViewPoint();
 	void Move(char key);
 	void ChangeViewPoint(char key);
-	void CrushWithWall(HitBox WallHitBox);
+	bool CrushWithWall(HitBox WallHitBox);
 
 };
 

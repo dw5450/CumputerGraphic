@@ -19,13 +19,13 @@ Player Player1;
 int map1[10][10] = { 1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+					1, 1, 0, 1, 0, 0, 1, 0, 1, 0,
+					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+					1, 0, 1, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					1, 1, 1, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					0, 0, 1, 1, 0, 0, 1, 0, 1, 0 };
+					1, 0, 0, 1, 0, 0, 1, 0, 1, 0 };
 
 
 Wall Walls1[100];
@@ -53,21 +53,18 @@ double getRadian(double _num);
 void initialize()
 
 {
+
+	//플레이어 원 설정
 	Player1.insertEye(Point3d(0.0, 0.0, 30.0));
 	Player1.insertViewPoint(Point3d(0.0, 0.0, 29.0));
 
+
+	//첫번째 맵 설정
 	for (int i = 9; i >= 0; i--)
 		for (int j = 0; j < 10; j++)
 		{
 
 			if (map1[i][j] == 1){
-				/*glPushMatrix();
-				glTranslated(j * 10, 0, (i - 9) * 10);
-				glScaled(1, 1, 1);
-				glutSolidCube(10);
-				glPopMatrix();*/
-
-
 				Walls1[WallNum].insertPos(Point3d(j * 10, 0, (i - 9) * 10));
 				Walls1[WallNum].insertSize(Point3d(10, 10, 10));
 
@@ -183,7 +180,10 @@ GLvoid drawScene(GLvoid)
 	glPopMatrix();
 
 	for (int i = 0; i < WallNum; i++)
+	{
 		Walls1[i].draw();
+	}
+		
 
 	
 	glPopMatrix();
@@ -206,6 +206,14 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 {
 	Player1.Move(key);
 	Player1.ChangeViewPoint(key);
+	
+	bool wall_crush;
+	for (int i = 0; i < WallNum; i++)
+	{
+		wall_crush = Player1.CrushWithWall(Walls1[i].returnHitBox());
+		if (wall_crush)
+			break;
+	}
 
 	if (key == 'i')
 		initialize();
