@@ -2,6 +2,7 @@
 #define __WALL_H__
 #include "MyStructs.h"
 #include "MyFunction.h"
+#include<glut.h>
 
 class Wall
 {

@@ -4,6 +4,7 @@
 #include <cstdio>
 #include "Player.h"
 #include "Wall.h"
+#include "MyFunction.h"
 
 #define PI   3.14159265359
 
@@ -23,22 +24,29 @@ int map1[10][10] = { 1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 1, 1, 0, 0, 1, 0, 1, 0,
 					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
-					1, 0, 0, 1, 0, 0, 1, 0, 1, 0 };
+					0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+					0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
+					0, 0, 0, 1, 0, 0, 1, 0, 1, 0 };
 
 
 Wall Walls1[100];
 int WallNum = 0;
 
 //글로벌 조명 설정용 변수
-GLfloat GlobalAmbientLight[] = { 0.2f, 0.2f, 0.2f, 0.2f };
+GLfloat GlobalAmbientLight[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 //조명 0 설정용 변수
-GLfloat AmbientLight0[] = { 0.2f, 0.2f, 0.2f, 0.2f };
-GLfloat DiffuseLight0[] = { 0.8, 0.8, 0.8, 1.0f };
+GLfloat AmbientLight0[] = { 0.2f, 0.2f, 0.2f, 0.0f };
+GLfloat DiffuseLight0[] = { 0.7, 0.7, 0.7, 1.0f };
 GLfloat SpecularLight0[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat LightPos0[] = { 0.0, 0, 0, 1.0 };
+GLfloat LightPos0[] = { 0, 0, 0, 1.0 };
+
+//조명 0 설정용 변수
+GLfloat AmbientLight1[] = { 0.2f, 0.2f, 0.2f, 0.0f };
+GLfloat DiffuseLight1[] = { 0.7, 0.7, 0.7, 1.0f };
+GLfloat SpecularLight1[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat LightPos1[] = { 50, 10, -50, 1.0 };
+
 
 //컬러 설정용 변수
 GLfloat  specref[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -105,7 +113,7 @@ GLvoid drawScene(GLvoid)
 
 	Point3d Eye = Player1.returnEye();
 	Point3d ViewPoint = Player1.returnViewPoint();
-	gluLookAt(Eye.x, Eye.y, Eye.z, ViewPoint.x, ViewPoint.y, ViewPoint.z, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
+	gluLookAt(Eye.x, Eye.y + 0.1, Eye.z, ViewPoint.x, ViewPoint.y, ViewPoint.z, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
 	
 	//모델링 변환 : 모델 위치 설정
 	glMatrixMode(GL_MODELVIEW);
@@ -116,7 +124,6 @@ GLvoid drawScene(GLvoid)
 
 	//조명 효과 설정
 	glEnable(GL_LIGHTING);                                    //조명 사용 설정
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, GlobalAmbientLight);         //전역 조명 모델 설정
 
 
 	//물체 색 효과 속성 설정
@@ -124,70 +131,49 @@ GLvoid drawScene(GLvoid)
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);               //재질 속성 설정(물체 색 효과 설정)
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);                  //하이라이트 색깔
 	glMateriali(GL_FRONT, GL_SHININESS, 64);                     //하이라이트 계수
-	glShadeModel(GL_SMOOTH);                                 //부드러운 쉐이딩
+	glShadeModel(GL_FLAT);                                 //부드러운 쉐이딩
 
 	//은면 제거, 컬링 설정
 	glEnable(GL_DEPTH_TEST);                                 //은면 제거 
-	//glEnable(GL_CULL_FACE);                                 //컬링
-	//glFrontFace(GL_CCW);                                    //앞면 -> ccw(반시계 방향) 설정
+	glEnable(GL_CULL_FACE);                                 //컬링
+	glFrontFace(GL_CCW);                                    //앞면 -> ccw(반시계 방향) 설정
+	//밑바닥  //파란색
 
-	//조명 0 설정
-	glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientLight0);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseLight0);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularLight0);
-	glLightfv(GL_LIGHT0, GL_POSITION, LightPos0);
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientLight1);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseLight1);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, SpecularLight1);
+	glLightfv(GL_LIGHT1, GL_POSITION, LightPos1);
 
 	//조명0 on
-	glEnable(GL_LIGHT0);
-
-	glPushMatrix();
+	glEnable(GL_LIGHT1);
 
 
-
-	//x축   빨간색
-	glColor3f(1.0, 0.0, 0.0);
-	glBegin(GL_LINES);
-	glVertex3i(0, 0, 0);
-	glVertex3i(1, 0, 0);
-	glEnd();
-
-	//y축   초록색
-	glColor3f(0.0, 1.0, 0.0);
-	glBegin(GL_LINES);
-	glVertex3i(0, 0, 0);
-	glVertex3i(0, 1, 0);
-	glEnd();
-
-
-	//z축   //파란색
-	glColor3f(0.0, 0.0, 1.0);
-	glBegin(GL_LINES);
-	glVertex3i(0, 0, 0);
-	glVertex3i(0, 0, 1);
-	glEnd();
-
-
-	//밑바닥  //파란색
 	glColor3f(0.0, 0.0, 1.0);
 	glPushMatrix();
-	glBegin(GL_QUADS);
-		glVertex3f(0, -5, 0);
-		glVertex3f(0, -5, -200);
-		glVertex3f(200, -5, -200);
-		glVertex3f(200, -5, 0);
-	glEnd();
+		glTranslated(50, -5, -50);
+		glScaled(1, 0.001, 1);
+		drawCube(100);
 
+
+	glEnd();
 	glPopMatrix();
 
 	for (int i = 0; i < WallNum; i++)
 	{
 		Walls1[i].draw();
 	}
-		
 
-	
+
+	glColor3f(1, 0, 0);
+	glPushMatrix();
+		glTranslated(LightPos0[0], LightPos0[1], LightPos0[2]);
+		glutSolidCube(1);
+
 	glPopMatrix();
 
+	//조명 0 설정
+	
 	glutSwapBuffers();
 }
 GLvoid Reshape(int w, int h)
@@ -214,6 +200,9 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		if (wall_crush)
 			break;
 	}
+
+	cout << Player1.returnViewPoint().x << endl;
+	cout << Player1.returnViewPoint().z << endl;
 
 	if (key == 'i')
 		initialize();

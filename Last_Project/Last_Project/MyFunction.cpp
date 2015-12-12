@@ -1,4 +1,6 @@
 #include "MyFunction.h"
+#include<iostream>
+#include<math.h>
 #include <glut.h>
 
 
@@ -29,12 +31,10 @@ void drawFace(Point3d vertax_pos[], int vertax[], int vertax_num, bool outer_ctr
 
 	if (outer_ctr == true)
 		glNormal3f(outer.x, outer.y, outer.z);
-
-
 	//면 그리기
 	for (int i = 0; i < vertax_num; i++)
 	{
-		for (int j = 0; j < 100; j++)
+		for (int j = 0; j < 8; j++)
 			if (vertax[i] == j)
 			{
 				glVertex3d(vertax_pos[j].x, vertax_pos[j].y, vertax_pos[j].z);

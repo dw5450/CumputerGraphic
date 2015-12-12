@@ -78,12 +78,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EndPoint.h" />
     <ClInclude Include="MyFunction.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EndPoint.cpp" />
     <ClCompile Include="MyFunction.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="main_state.cpp" />
