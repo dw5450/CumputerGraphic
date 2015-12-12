@@ -1,5 +1,6 @@
 #include<iostream>
 #include "Player.h"
+#include "MyStructs.h"
 
 void Player::insertEye(Point3d _Eye){	Eye = _Eye; }
 void Player::insertViewPoint(Point3d _ViewPoint) { ViewPoint = _ViewPoint; }
@@ -66,4 +67,9 @@ void Player::ChangeViewPoint(char key)
 
 	if (ViewMode == VIEWBACK)
 		ViewPoint.insert(Eye.x, Eye.y, Eye.z + 1);
+}
+
+void Player::CrushWithWall(HitBox WallHitBox)
+{
+
 }
