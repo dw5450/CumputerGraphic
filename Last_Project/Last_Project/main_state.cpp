@@ -8,12 +8,25 @@
 
 #define PI   3.14159265359
 
+#define PLAY		22222222
+#define VIEW_MAP    22222221
+
+#define TITLE 8321783
+#define STAGE1 8321783
+#define STAGE2 8321784
+#define STAGE3 8321785
+#define END	8321786
+
+
+
 
 using namespace std;
 
 //필요한 변수 선언
 
 int ViewMode = 0;
+
+int cur_state;
 
 Player Player1;
 
@@ -30,7 +43,7 @@ int map1[10][10] = { 1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
 
 
 Wall Walls1[100];
-int WallNum = 0;
+int Wall1Num = 0;
 
 //글로벌 조명 설정용 변수
 GLfloat GlobalAmbientLight[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -62,6 +75,10 @@ void initialize()
 
 {
 
+	cur_state = STAGE1;
+	//뷰 모드 설정
+
+	ViewMode = PLAY;
 	//플레이어 원 설정
 	Player1.insertEye(Point3d(0.0, 0.0, 30.0));
 	Player1.insertViewPoint(Point3d(0.0, 0.0, 29.0));
@@ -71,15 +88,13 @@ void initialize()
 	for (int i = 9; i >= 0; i--)
 		for (int j = 0; j < 10; j++)
 		{
-
 			if (map1[i][j] == 1){
-				Walls1[WallNum].insertPos(Point3d(j * 10, 0, (i - 9) * 10));
-				Walls1[WallNum].insertSize(Point3d(10, 10, 10));
+				Walls1[Wall1Num].insertPos(Point3d(j * 10, 0, (i - 9) * 10));
+				Walls1[Wall1Num].insertSize(Point3d(10, 10, 10));
 
-				WallNum++;
+				Wall1Num++;
 			}
 		}
-
 }
 
 void main(int argc, char *argv[])
@@ -113,7 +128,16 @@ GLvoid drawScene(GLvoid)
 
 	Point3d Eye = Player1.returnEye();
 	Point3d ViewPoint = Player1.returnViewPoint();
-	gluLookAt(Eye.x, Eye.y + 0.1, Eye.z, ViewPoint.x, ViewPoint.y, ViewPoint.z, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
+
+	if (ViewMode == PLAY)
+		gluLookAt(Eye.x, Eye.y + 0.1, Eye.z, ViewPoint.x, ViewPoint.y, ViewPoint.z, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
+
+	else if (ViewMode == VIEW_MAP){
+
+		gluLookAt(50, 100.0, -50, 49, -1, -50, 0.0, 1.0, 0.0);      // 원근 투영을 사용하는 경우
+		glPushMatrix();
+
+	}
 	
 	//모델링 변환 : 모델 위치 설정
 	glMatrixMode(GL_MODELVIEW);
@@ -148,18 +172,18 @@ GLvoid drawScene(GLvoid)
 	//조명0 on
 	glEnable(GL_LIGHT1);
 
-
-	glColor3f(0.0, 0.0, 1.0);
+	
+	glColor3f(0.0, 1.0, 0.0);
 	glPushMatrix();
 		glTranslated(50, -5, -50);
 		glScaled(1, 0.001, 1);
 		drawCube(100);
 
-
-	glEnd();
 	glPopMatrix();
 
-	for (int i = 0; i < WallNum; i++)
+
+	glColor3f(0, 0, 1);
+	for (int i = 0; i < Wall1Num; i++)
 	{
 		Walls1[i].draw();
 	}
@@ -194,7 +218,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	Player1.ChangeViewPoint(key);
 	
 	bool wall_crush;
-	for (int i = 0; i < WallNum; i++)
+	for (int i = 0; i < Wall1Num; i++)
 	{
 		wall_crush = Player1.CrushWithWall(Walls1[i].returnHitBox());
 		if (wall_crush)
@@ -203,6 +227,12 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 
 	cout << Player1.returnViewPoint().x << endl;
 	cout << Player1.returnViewPoint().z << endl;
+
+	if (key == 'q')
+	{
+		if (ViewMode == PLAY)	ViewMode = VIEW_MAP;
+		else if (ViewMode == VIEW_MAP)	ViewMode = PLAY;
+	}
 
 	if (key == 'i')
 		initialize();

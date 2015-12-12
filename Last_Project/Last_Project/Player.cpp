@@ -94,9 +94,38 @@ bool Player::CrushWithWall(HitBox WallHitBox)
 	{
 		Eye = oldEye;
 		ChangeViewPoint(NULL);
-		std:: cout << "crush!" << std::endl;
+		//std:: cout << "crush!" << std::endl;
 	}
 
 	return wall_crush;
 
 }
+
+bool Player::CrushWithEndPoint(HitBox EndPointHitBox)
+{
+	double left_player = ViewPoint.x - HitBoxSize / 2;
+	double bottom_player = ViewPoint.z - HitBoxSize / 2;
+	double right_player = ViewPoint.x + HitBoxSize / 2;
+	double top_player = ViewPoint.z + HitBoxSize / 2;
+
+	double left_EndPoint = EndPointHitBox.Pos.x - EndPointHitBox.Size.x / 2;
+	double bottom_EndPoint = EndPointHitBox.Pos.z - EndPointHitBox.Size.z / 2;
+	double	right_EndPoint = EndPointHitBox.Pos.x + EndPointHitBox.Size.x / 2;
+	double top_EndPoint = EndPointHitBox.Pos.z + EndPointHitBox.Size.z / 2;
+
+	bool EndPoint_crush = true;
+	if (left_player >right_EndPoint) EndPoint_crush = false;
+	else if (right_player < left_EndPoint) EndPoint_crush = false;
+	else if (top_player <  bottom_EndPoint) EndPoint_crush = false;
+	else if (bottom_player > top_EndPoint) EndPoint_crush = false;
+
+	if (EndPoint_crush)
+	{
+
+		//std::cout << "crush!" << std::endl;
+	}
+
+	return EndPoint_crush;
+
+}
+
