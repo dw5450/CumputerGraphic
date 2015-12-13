@@ -15,7 +15,7 @@ void Item::draw()
 	glPushMatrix();
 	glTranslated(Pos.x, Pos.y, Pos.z);
 	glScaled(Size.x, Size.y, Size.z);
-	glutSolidTeapot(5);
+	glutSolidTeapot(0.3);
 	glPopMatrix();
 
 }

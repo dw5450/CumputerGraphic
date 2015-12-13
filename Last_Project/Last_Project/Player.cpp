@@ -12,7 +12,7 @@ Point3d Player::returnViewPoint() { return ViewPoint; }
 
 void Player::Move(char key)
 {
-	std::cout << ViewMode << std::endl;
+	//std::cout << ViewMode << std::endl;
 
 	oldEye = Eye;
 
@@ -131,6 +131,36 @@ bool Player::CrushWithEndPoint(HitBox EndPointHitBox)
 	return EndPoint_crush;
 
 }
+
+
+bool Player::CrushWithItem(HitBox ItemHitBox)
+{
+	double left_player = ViewPoint.x - HitBoxSize / 2;
+	double bottom_player = ViewPoint.z - HitBoxSize / 2;
+	double right_player = ViewPoint.x + HitBoxSize / 2;
+	double top_player = ViewPoint.z + HitBoxSize / 2;
+
+	double left_Item = ItemHitBox.Pos.x - ItemHitBox.Size.x / 2;
+	double bottom_Item = ItemHitBox.Pos.z - ItemHitBox.Size.z / 2;
+	double	right_Item = ItemHitBox.Pos.x + ItemHitBox.Size.x / 2;
+	double top_Item = ItemHitBox.Pos.z + ItemHitBox.Size.z / 2;
+
+	bool Item_crush = true;
+	if (left_player >right_Item) Item_crush = false;
+	else if (right_player < left_Item) Item_crush = false;
+	else if (top_player <  bottom_Item) Item_crush = false;
+	else if (bottom_player > top_Item) Item_crush = false;
+
+	if (Item_crush)
+	{
+
+		//std::cout << "crush!" << std::endl;
+	}
+
+	return Item_crush;
+
+}
+
 
 
 

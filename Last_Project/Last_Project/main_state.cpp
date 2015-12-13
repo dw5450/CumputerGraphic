@@ -6,6 +6,7 @@
 #include "Wall.h"
 #include "MyFunction.h"
 #include "EndPoint.h"
+#include "Item.h"
 
 #define PI   3.14159265359
 
@@ -34,67 +35,75 @@ Player Player1;
 //첫번째 맵 변수
 int map1[10][10] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 					3, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-					1, 1, 1, 0, 1, 1, 0, 0, 0, 1,
+					1, 1, 1, 0, 1, 1, 0, 0, 5, 1,
 					1, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-					1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+					1, 5, 1, 5, 1, 0, 1, 0, 5, 1,
 					1, 1, 1, 0, 1, 1, 1, 0, 1, 1,
 					1, 0, 0, 0, 1, 1, 0, 0, 0, 1,
 					1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
-					1, 0, 1, 0, 0, 0, 0, 1, 0, 2,
-					1, 1, 1, 1, 1, 1, 1, 1, 1, 1, };	//0 길 1 벽 2마지막 3처음
+					1, 5, 1, 0, 0, 0, 0, 1, 0, 2,
+					1, 1, 1, 1, 1, 1, 1, 1, 1, 1, };	//0 길 1 벽 2마지막 3처음 5아이템
 
 
 int map2[15][15] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-					1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1,
-					1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1,
-					1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1,
+					1, 1, 1, 0, 0, 0, 1, 5, 1, 1, 5, 1, 1, 1, 1,
+					1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 5, 1,
+					1, 0, 0, 0, 1, 5, 1, 1, 0, 1, 1, 1, 0, 1, 1,
 					1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1,
 					1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1,
 					1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1,
 					1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1,
-					3, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1,
+					3, 0, 1, 5, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1,
 					1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
 					1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1,
-					1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1,
-					1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-					1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+					1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 5, 1,
+					1, 5, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+					1, 1, 1, 1, 1, 5, 1, 1, 1, 0, 1, 1, 1, 1, 1,
 					1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, };
 
 
 int map3[20][20] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-					1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1,
+					1, 1, 1, 1, 1, 5, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 5, 1,
 					1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1,
-					1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
-					1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1,
+					1, 1, 0, 1, 1, 1, 1, 5, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
+					1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 5, 1,
 					1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1,
-					1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1,
+					1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 5, 1,
 					1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
 					1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
 					1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1,
 					1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1,
-					1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1,
+					1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 5, 0, 1, 1, 0, 1, 0, 0, 0, 1,
 					1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1,
-					1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+					1, 5, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
 					1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
 					1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
-					1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1,
-					1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1,
-					1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+					1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 5, 1, 1, 0, 1, 1, 1, 0, 1,
+					1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 5, 0, 1,
+					1, 0, 1, 0, 0, 0, 1, 5, 1, 1, 1, 1, 1, 5, 0, 5, 1, 1, 1, 1,
 					1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, };
 
 
 Wall Walls1[100];
 int Wall1Num = 0;
 EndPoint EndPoint1;
+Item Item1[100];
+int Item1Num = 0;
 
 Wall Walls2[225];
 int Wall2Num = 0;
 EndPoint EndPoint2;
+Item Item2[100];
+int Item2Num = 0;
 
 
 Wall Walls3[400];
 int Wall3Num = 0;
 EndPoint EndPoint3;
+Item Item3[100];
+int Item3Num = 0;
+
+int CCV_NUM = 0;
 
 
 
@@ -143,6 +152,13 @@ void load_statge1()
 				EndPoint1.insertSize(Point3d(10, 10, 10));
 
 			}
+
+			if (map1[i][j] == 5){
+				Item1[Item1Num].insertPos(Point3d(j * 10 + 5, 0, (i - 9) * 10 - 5));
+				Item1[Item1Num].insertSize(Point3d(10, 10, 10));
+				Item1Num++;
+
+			}
 		}
 
 	cur_state = STAGE1;
@@ -177,6 +193,13 @@ void load_statge2()
 			if (map2[i][j] == 2){
 				EndPoint2.insertPos(Point3d(j * 10 + 5, 0, (i - 14) * 10 - 5));
 				EndPoint2.insertSize(Point3d(10, 10, 10));
+			}
+
+			if (map2[i][j] == 5){
+				Item2[Item2Num].insertPos(Point3d(j * 10 + 5, 0, (i - 14) * 10 - 5));
+				Item2[Item2Num].insertSize(Point3d(10, 10, 10));
+				Item2Num++;
+
 			}
 		}
 
@@ -213,7 +236,15 @@ void load_statge3()
 				EndPoint3.insertPos(Point3d(j * 10 + 5, 0, (i - 19) * 10 - 5));
 				EndPoint3.insertSize(Point3d(10, 10, 10));
 			}
+
+			if (map1[i][j] == 5){
+				Item3[Item3Num].insertPos(Point3d(j * 10 + 5, 0, (i - 19) * 10 - 5));
+				Item3[Item3Num].insertSize(Point3d(10, 10, 10));
+				Item3Num++;
+
+			}
 		}
+
 
 	cur_state = STAGE3;
 	//뷰 모드 설정
@@ -235,7 +266,7 @@ void load_statge3()
 void initialize()
 {
 
-	load_statge1();
+	load_statge3();
 }
 
 
@@ -323,7 +354,7 @@ void drawStage1()
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);               //재질 속성 설정(물체 색 효과 설정)
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);                  //하이라이트 색깔
 	glMateriali(GL_FRONT, GL_SHININESS, 64);                     //하이라이트 계수
-	glShadeModel(GL_FLAT);                                 //딱딱한 쉐이딩
+	glShadeModel(GL_SMOOTH);                                 //부드러운 쉐이딩
 
 	//은면 제거, 컬링 설정
 	glEnable(GL_DEPTH_TEST);                                 //은면 제거 
@@ -355,6 +386,12 @@ void drawStage1()
 	{
 		Walls1[i].draw();
 	}
+
+	for (int i = 0; i < Item1Num; i++)
+	{
+		Item1[i].draw();
+	}
+
 
 	EndPoint1.draw();
 	
@@ -398,7 +435,7 @@ void drawStage2()
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);               //재질 속성 설정(물체 색 효과 설정)
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);                  //하이라이트 색깔
 	glMateriali(GL_FRONT, GL_SHININESS, 64);                     //하이라이트 계수
-	glShadeModel(GL_FLAT);                                 //딱딱한 쉐이딩
+	glShadeModel(GL_SMOOTH);                                 //부드러운 쉐이딩
 
 	//은면 제거, 컬링 설정
 	glEnable(GL_DEPTH_TEST);                                 //은면 제거 
@@ -435,10 +472,18 @@ void drawStage2()
 	glColor3f(0, 0, 1);
 	for (int i = 0; i < Wall2Num; i++)
 	{
+		
 		Walls2[i].draw();
 	}
 
+	for (int i = 0; i < Item2Num; i++)
+	{
+		Item2[i].draw();
+	}
+
 	EndPoint2.draw();
+
+	Player1.draw();
 }
 
 void drawStage3()
@@ -479,7 +524,7 @@ void drawStage3()
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);               //재질 속성 설정(물체 색 효과 설정)
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);                  //하이라이트 색깔
 	glMateriali(GL_FRONT, GL_SHININESS, 64);                     //하이라이트 계수
-	glShadeModel(GL_FLAT);                                 //딱딱한 쉐이딩
+	glShadeModel(GL_SMOOTH);                                 //부드러운 쉐이딩
 
 	//은면 제거, 컬링 설정
 	glEnable(GL_DEPTH_TEST);                                 //은면 제거 
@@ -519,6 +564,11 @@ void drawStage3()
 		Walls3[i].draw();
 	}
 
+	for (int i = 0; i < Item3Num; i++)
+	{
+		Item3[i].draw();
+	}
+
 	EndPoint3.draw();
 
 	Player1.draw();
@@ -547,7 +597,6 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 
 	if (cur_state == STAGE1)
 	{
-
 		bool wall_crush;
 		for (int i = 0; i < Wall1Num; i++)
 		{
@@ -555,7 +604,20 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			if (wall_crush)
 				break;
 		}
+
+		bool item_crush;
+		for (int i = 0; i < Item1Num; i++)
+		{
+			item_crush = Player1.CrushWithItem(Item1[i].returnHitBox());
+			if (item_crush){
+				CCV_NUM++;
+				Item1[i].insertPos(Point3d(-1000, -1000, 1000));
+				break;
+			}
+		}
+		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) load_statge2();
 	}
+
 
 	if (cur_state == STAGE2)
 	{
@@ -566,6 +628,19 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			if (wall_crush)
 				break;
 		}
+
+		bool item_crush;
+		for (int i = 0; i < Item2Num; i++)
+		{
+			item_crush = Player1.CrushWithItem(Item2[i].returnHitBox());
+			if (item_crush){
+				CCV_NUM++;
+				Item2[i].insertPos(Point3d(-1000, -1000, 1000));
+				break;
+			}
+		}
+
+		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) load_statge3();
 
 	}
 
@@ -580,11 +655,24 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 				break;
 		}
 
+		bool item_crush;
+		for (int i = 0; i < Item3Num; i++)
+		{
+			item_crush = Player1.CrushWithItem(Item3[i].returnHitBox());
+			if (item_crush){
+				CCV_NUM++;
+				Item3[i].insertPos(Point3d(-1000, -1000, 1000));
+				break;
+			}
+		}
 	}
 
 	if (key == 'q')
 	{
-		if (ViewMode == PLAY)	ViewMode = VIEW_MAP;
+		if (ViewMode == PLAY && CCV_NUM > 0)	{
+			ViewMode = VIEW_MAP;
+			CCV_NUM--;
+		}
 		else if (ViewMode == VIEW_MAP)	ViewMode = PLAY;
 	}
 
