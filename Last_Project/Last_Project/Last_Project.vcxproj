@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EndPoint.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="MyFunction.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Player.h" />
@@ -89,6 +90,7 @@
     <ClCompile Include="MyFunction.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="main_state.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

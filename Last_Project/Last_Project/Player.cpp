@@ -5,12 +5,14 @@
 
 void Player::insertEye(Point3d _Eye){	Eye = _Eye; }
 void Player::insertViewPoint(Point3d _ViewPoint) { ViewPoint = _ViewPoint; }
+void Player::insertViewMode(int _ViewMode) { CameraTotalAngle = _ViewMode; ViewMode = _ViewMode; }
 Point3d Player::returnEye() { return Eye; }
 Point3d Player::returnViewPoint() { return ViewPoint; }
 
 
 void Player::Move(char key)
 {
+	std::cout << ViewMode << std::endl;
 
 	oldEye = Eye;
 
@@ -136,7 +138,7 @@ void Player::draw()
 {
 	glPushMatrix();
 	glTranslated(Eye.x, Eye.y, Eye.z);
-	glutSolidSphere(1, 32, 32);
+	glutSolidSphere(4, 32, 32);
 	glPopMatrix();
 
 }

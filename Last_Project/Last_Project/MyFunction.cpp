@@ -3,7 +3,6 @@
 #include<math.h>
 #include <glut.h>
 
-
 void drawFace(Point3d vertax_pos[], int vertax[], int vertax_num, bool outer_ctr)
 {
 	Point3d vector_A;
@@ -78,3 +77,4 @@ void drawCube(double size)
 
 
 }
+

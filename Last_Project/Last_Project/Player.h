@@ -18,13 +18,14 @@ private:
 	Point3d oldEye;
 	int HitBoxSize;
 	int CameraTotalAngle = 0;
-	int ViewMode = VIEWFRONT;
+	int ViewMode;
 
 public:
 	Player(){};
 	Player(Point3d _Eye, Point3d _ViewPoint) : Eye(_Eye), ViewPoint(_ViewPoint){ HitBoxSize = 0; }
 	void insertEye(Point3d _Eye);
 	void insertViewPoint(Point3d _ViewPoint);
+	void insertViewMode(int _ViewMode);
 	Point3d returnEye();
 	Point3d returnViewPoint();
 	void Move(char key);
