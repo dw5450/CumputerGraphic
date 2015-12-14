@@ -1,11 +1,9 @@
 #ifndef __WALL_H__
 #define __WALL_H__
+
 #include "MyStructs.h"
 #include "MyFunction.h"
-#include<glut.h>
-#include<iostream>
-#include<math.h>
-#include<Windows.h>
+#include "MyInclude.h"
 
 
 class Wall

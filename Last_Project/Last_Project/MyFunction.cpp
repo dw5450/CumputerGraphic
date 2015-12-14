@@ -1,7 +1,8 @@
 #include "MyFunction.h"
+#include "MyStructs.h"
 #include<iostream>
 #include<math.h>
-#include <glut.h>
+#include "MyInclude.h"
 
 void drawFace(Point3d vertax_pos[], int vertax[], int vertax_num, bool outer_ctr)
 {
@@ -30,14 +31,27 @@ void drawFace(Point3d vertax_pos[], int vertax[], int vertax_num, bool outer_ctr
 
 	if (outer_ctr == true)
 		glNormal3f(outer.x, outer.y, outer.z);
+
+	int cnt = 0;
 	//면 그리기
 	for (int i = 0; i < vertax_num; i++)
 	{
+
 		for (int j = 0; j < 8; j++)
 			if (vertax[i] == j)
 			{
+				if (cnt == 0) glTexCoord2d(0.0f, 0.0f);
+
+				if (cnt == 1) glTexCoord2d(0.0f, 1.0f);
+
+				if (cnt == 2) glTexCoord2d(1.0f, 1.0f);
+
+				if (cnt == 3) glTexCoord2d(1.0f, 0.0f);
+
 				glVertex3d(vertax_pos[j].x, vertax_pos[j].y, vertax_pos[j].z);
 				break;
+
+				cnt++;
 			}
 	}
 

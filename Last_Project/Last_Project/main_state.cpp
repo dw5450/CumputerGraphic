@@ -1,25 +1,9 @@
-#include<glut.h>
-#include<iostream>
-#include <list>
-#include <cstdio>
+#include "MyInclude.h"
 #include "Player.h"
 #include "Wall.h"
 #include "MyFunction.h"
 #include "EndPoint.h"
 #include "Item.h"
-
-#define PI   3.14159265359
-
-#define PLAY		22222222
-#define VIEW_MAP    22222221
-
-#define TITLE 8321783
-#define STAGE1 8321784
-#define STAGE2 8321785
-#define STAGE3 8321786
-#define FINISH	83217
-
-
 
 
 using namespace std;
@@ -105,7 +89,11 @@ int Item3Num = 0;
 
 int CCV_NUM = 0;
 
+bool change;
 
+GLubyte *pBytes; // 데이터를 가리킬 포인터
+BITMAPINFO *info; // 비트맵 헤더 저장핛 변수
+GLuint ground_image[1]; // 텍스처 이름
 
 //글로벌 조명 설정용 변수
 GLfloat GlobalAmbientLight[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -265,8 +253,7 @@ void load_statge3()
 
 void initialize()
 {
-
-	load_statge3();
+	load_statge1();
 }
 
 
@@ -371,11 +358,43 @@ void drawStage1()
 	//조명0 on
 	glEnable(GL_LIGHT1);
 
-	glColor3f(0.0, 1.0, 0.0);
+	//n개의 이미지 텍스처 매핑을 핚다.
+	glGenTextures(1, ground_image);
+	//텍스처와 객체를 결합핚다. --- (1)
+	glBindTexture(GL_TEXTURE_2D, ground_image[0]);
+	//이미지 로딩을 핚다. --- (2)
+	pBytes = LoadDIBitmap("ground.BMP", &info);
+	if (pBytes == NULL)
+		printf("null\n");
+	//텍스처 설정 정의를 핚다. --- (3)
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, 512, 512, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pBytes);
+
+	// 텍스처 파라미터 설정
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
 	glPushMatrix();
-	glTranslated(50, -5, -50);
-	glScaled(1, 0.001, 1);
-	drawCube(100);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ground_image[0]);
+
+	glBegin(GL_QUADS);
+		glTexCoord2d(0.0f, 0.0f);
+		glVertex3f(0, -4.9, -100);
+
+		glTexCoord2d(0.0f, 1.0f);
+		glVertex3f(0, -4.9, 0);
+
+		glTexCoord2d(1.0f, 1.0f);
+		glVertex3f(100, -4.9, 0);
+
+		glTexCoord2d(1.0f, 0.0f);
+		glVertex3f(100, -4.9, -100);
+		glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 
 	glPopMatrix();
 
@@ -394,7 +413,11 @@ void drawStage1()
 
 
 	EndPoint1.draw();
-	
+
+
+
+	glPushMatrix();
+	glColor3f(1, 1, 1);
 }
 
 void drawStage2()
@@ -452,12 +475,44 @@ void drawStage2()
 	//조명0 on
 	glEnable(GL_LIGHT1);
 
-	glColor3f(0.0, 1.0, 0.0);
-	glPushMatrix();
-	glTranslated(50, -5, -50);
-	glScaled(1, 0.001, 1);
-	drawCube(100);
+	//n개의 이미지 텍스처 매핑을 핚다.
+	glGenTextures(1, ground_image);
+	//텍스처와 객체를 결합핚다. --- (1)
+	glBindTexture(GL_TEXTURE_2D, ground_image[0]);
+	//이미지 로딩을 핚다. --- (2)
+	pBytes = LoadDIBitmap("ground.BMP", &info);
+	if (pBytes == NULL)
+		printf("null\n");
 
+	//텍스처 설정 정의를 핚다. --- (3)
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, 512, 512, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pBytes);
+
+	// 텍스처 파라미터 설정
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ground_image[0]);
+
+	glBegin(GL_QUADS);
+		glTexCoord2d(0.0f, 0.0f);
+		glVertex3f(0, -4.9, -150);
+
+		glTexCoord2d(0.0f, 1.0f);
+		glVertex3f(0, -4.9, 0);
+
+		glTexCoord2d(1.0f, 1.0f);
+		glVertex3f(150, -4.9, 0);
+
+		glTexCoord2d(1.0f, 0.0f);
+		glVertex3f(150, -4.9, -150);
+		glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 	glPopMatrix();
 
 
@@ -530,7 +585,6 @@ void drawStage3()
 	glEnable(GL_DEPTH_TEST);                                 //은면 제거 
 	glEnable(GL_CULL_FACE);                                 //컬링
 	glFrontFace(GL_CCW);                                    //앞면 -> ccw(반시계 방향) 설정
-	//밑바닥  //파란색
 
 
 	glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientLight1);
@@ -541,29 +595,54 @@ void drawStage3()
 	//조명0 on
 	glEnable(GL_LIGHT1);
 
-	glColor3f(0.0, 1.0, 0.0);
-	glPushMatrix();
-	glTranslated(50, -5, -50);
-	glScaled(1, 0.001, 1);
-	drawCube(100);
+	//n개의 이미지 텍스처 매핑을 핚다.
+	glGenTextures(1, ground_image);
+	//텍스처와 객체를 결합핚다. --- (1)
+	glBindTexture(GL_TEXTURE_2D, ground_image[0]);
+	//이미지 로딩을 핚다. --- (2)
+	pBytes = LoadDIBitmap("ground.BMP", &info);
+	if (pBytes == NULL)
+		printf("null\n");
 
+	//텍스처 설정 정의를 핚다. --- (3)
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, 512, 512, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, pBytes);
+
+	// 텍스처 파라미터 설정
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	glPushMatrix();
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, ground_image[0]);
+
+			glBegin(GL_QUADS);
+				glTexCoord2d(0.0f, 0.0f);
+				glVertex3f(0, -4.9, -200);
+
+				glTexCoord2d(0.0f, 1.0f);
+				glVertex3f(0, -4.9, 0);
+
+				glTexCoord2d(1.0f, 1.0f);
+				glVertex3f(200, -4.9, 0);
+
+				glTexCoord2d(1.0f, 0.0f);
+				glVertex3f(200, -4.9, -200);
+			glEnd();
+		glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 
 
-	glColor3f(0.0, 1.0, 0.0);
 	glPushMatrix();
-	glTranslated(100, -5, -100);
-	glScaled(1, 0.001, 1);
-	drawCube(200);
-
-	glPopMatrix();
-
-	glColor3f(0, 0, 1);
 	for (int i = 0; i < Wall3Num; i++)
 	{
 		Walls3[i].draw();
 	}
+	glPopMatrix();
 
+	glColor3f(0, 0, 1);
 	for (int i = 0; i < Item3Num; i++)
 	{
 		Item3[i].draw();
@@ -571,6 +650,8 @@ void drawStage3()
 
 	EndPoint3.draw();
 
+
+	glColor3f(1, 0, 0);
 	Player1.draw();
 
 }
@@ -589,10 +670,10 @@ GLvoid Reshape(int w, int h)
 
 GLvoid Keyboard(unsigned char key, int x, int y)
 {
-
+	change = false;
 	if (ViewMode == PLAY){
 		Player1.Move(key);
-		Player1.ChangeViewPoint(key);
+		change = Player1.ChangeViewPoint(key);
 	}
 
 	if (cur_state == STAGE1)
@@ -612,10 +693,15 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			if (item_crush){
 				CCV_NUM++;
 				Item1[i].insertPos(Point3d(-1000, -1000, 1000));
+				Item1[i].insertSize(Point3d(0,0,0));
+				change = true;
 				break;
 			}
 		}
-		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) load_statge2();
+		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) {
+			load_statge2();
+			change = true;
+		}
 	}
 
 
@@ -636,11 +722,15 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			if (item_crush){
 				CCV_NUM++;
 				Item2[i].insertPos(Point3d(-1000, -1000, 1000));
+				Item2[i].insertSize(Point3d(0, 0, 0));
+				change = true;
 				break;
 			}
 		}
 
-		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) load_statge3();
+		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) {
+			load_statge3(); change = true;
+		}
 
 	}
 
@@ -662,6 +752,8 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			if (item_crush){
 				CCV_NUM++;
 				Item3[i].insertPos(Point3d(-1000, -1000, 1000));
+				Item3[i].insertSize(Point3d(0, 0, 0));
+				change = true;
 				break;
 			}
 		}
@@ -679,6 +771,25 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	if (key == 'i')
 		initialize();
 
+
+	if (change == true)
+	{
+		system("cls");
+
+		if (cur_state == STAGE1) cout << "Stage : STAGE1" << endl;
+		if (cur_state == STAGE2) cout << "Stage : STAGE2" << endl;
+		if (cur_state == STAGE3) cout << "Stage : STAGE3" << endl;
+
+		if (ViewMode == PLAY) cout << "ViewMode : PLAY" << endl;
+		if (ViewMode == VIEW_MAP) cout << "ViewMode : VIEW_MAP" << endl;
+
+		if (Player1.returnViewMode() == VIEWFRONT) cout << "ViewDir : VIEWFRONT" << endl;
+		if (Player1.returnViewMode() == VIEWRIGHT) cout << "ViewDir : VIEWRIGHT" << endl;
+		if (Player1.returnViewMode() == VIEWBACK) cout << "ViewDir : VIEWBACK" << endl;
+		if (Player1.returnViewMode() == VIEWLEFT) cout << "ViewDir : VIEWLEFT" << endl;
+
+		cout << "Can Chagne View Num : " << CCV_NUM << endl;
+	}
 
 	glutPostRedisplay();// 현재 윈도우를 refresh하게 한다.
 }

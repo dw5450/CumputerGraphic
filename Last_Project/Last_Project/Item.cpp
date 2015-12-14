@@ -1,5 +1,5 @@
 #include "Item.h"
-#include <glut.h>
+#include "MyInclude.h"
 
 void Item::insertPos(Point3d _Pos){ Pos = _Pos; }
 void Item::insertSize(Point3d _Size)

@@ -28,8 +28,9 @@ public:
 	void insertViewMode(int _ViewMode);
 	Point3d returnEye();
 	Point3d returnViewPoint();
+	int returnViewMode();
 	void Move(char key);
-	void ChangeViewPoint(char key);
+	bool ChangeViewPoint(char key);
 	bool CrushWithWall(HitBox WallHitBox);
 	bool CrushWithEndPoint(HitBox EndPointHitBox);
 	bool CrushWithItem(HitBox ItemHitBox);

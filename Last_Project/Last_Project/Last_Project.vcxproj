@@ -81,6 +81,7 @@
     <ClInclude Include="EndPoint.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="MyFunction.h" />
+    <ClInclude Include="MyInclude.h" />
     <ClInclude Include="MyStructs.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Wall.h" />

@@ -1,7 +1,7 @@
 #include<iostream>
 #include "EndPoint.h"
 #include "MyStructs.h"
-#include <glut.h>
+#include "MyInclude.h"
 
 
 void EndPoint::insertPos(Point3d _Pos){ Pos = _Pos; }

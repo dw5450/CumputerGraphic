@@ -1,13 +1,14 @@
 #include<iostream>
 #include "Player.h"
 #include "MyStructs.h"
-#include <glut.h>
+#include "MyInclude.h"
 
 void Player::insertEye(Point3d _Eye){	Eye = _Eye; }
 void Player::insertViewPoint(Point3d _ViewPoint) { ViewPoint = _ViewPoint; }
 void Player::insertViewMode(int _ViewMode) { CameraTotalAngle = _ViewMode; ViewMode = _ViewMode; }
 Point3d Player::returnEye() { return Eye; }
 Point3d Player::returnViewPoint() { return ViewPoint; }
+int Player::returnViewMode(){ return ViewMode; }
 
 
 void Player::Move(char key)
@@ -47,16 +48,19 @@ void Player::Move(char key)
 	}
 }
 
-void Player::ChangeViewPoint(char key)
+bool Player::ChangeViewPoint(char key)
 {
+	bool change = false;
 	if (key == 'd' || key == 'D')
 	{
+		change = true;
 		CameraTotalAngle += VIEWRIGHT;
 	}
 
 
 	if (key == 'a' || key == 'A')
 	{
+		change = true;
 		CameraTotalAngle += VIEWLEFT;
 	}
 
@@ -73,6 +77,8 @@ void Player::ChangeViewPoint(char key)
 
 	if (ViewMode == VIEWBACK)
 		ViewPoint.insert(Eye.x, Eye.y, Eye.z + 1);
+
+	return change;
 }
 
 bool Player::CrushWithWall(HitBox WallHitBox)

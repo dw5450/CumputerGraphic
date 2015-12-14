@@ -1,10 +1,8 @@
 #ifndef __MYFUNCTION_H__
 #define	__MYFUNCTION_H__
+
 #include "MyStructs.h"
-#include<glut.h>
-#include<iostream>
-#include<math.h>
-#include<Windows.h>
+#include "MyInclude.h"
 
 
 

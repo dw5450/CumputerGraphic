@@ -2,11 +2,7 @@
 #include "Wall.h"
 #include "MyStructs.h"
 #include "MyFunction.h"
-#include<glut.h>
-#include<iostream>
-#include<math.h>
-#include<Windows.h>
-
+#include "MyInclude.h"
 
 Wall::Wall()
 {
@@ -52,12 +48,6 @@ void Wall::_drawWallFace(Point3d vertax_pos[], int vertax[], int vertax_num, boo
 		-(vector_A.x *  vector_B.z - vector_A.z *  vector_B.x),
 		vector_A.x *  vector_B.y - vector_A.y *  vector_B.x);
 
-
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-
 	glBegin(GL_QUADS);
 
 	//법선 벡터 설정
@@ -100,6 +90,11 @@ void Wall::_drawWall(double size)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
 
 	Point3d dots[8];
 	dots[0].insert(-(size / 2), (size / 2), (size / 2));
