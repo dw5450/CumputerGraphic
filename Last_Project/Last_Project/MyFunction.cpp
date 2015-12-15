@@ -4,6 +4,7 @@
 #include<math.h>
 #include "MyInclude.h"
 
+
 void drawFace(Point3d vertax_pos[], int vertax[], int vertax_num, bool outer_ctr)
 {
 	Point3d vector_A;

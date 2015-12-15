@@ -2,9 +2,13 @@
 #define __MYINCLUDE_H__
 
 #include<glut.h>
+#include<time.h>
 #include<iostream>
 #include<math.h>
 #include<Windows.h>
+#include<stdlib.h>
+#include<string.h>
+
 
 #define PI   3.14159265359
 

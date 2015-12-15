@@ -109,6 +109,93 @@ GLfloat LightPos1[] = { 50, 10, -50, 1.0 };
 //컬러 설정용 변수
 GLfloat  specref[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
+
+float red = 0, green = 0, blue = 0;
+float snowObejct[100][3];
+float snowColor[100][3];
+
+void snow()
+{
+	for (int i = 0; i<100; ++i)
+	{
+		glPushMatrix();
+		glColor3f(snowColor[i][0], snowColor[i][1], snowColor[i][2]);//색상
+		glTranslatef(snowObejct[i][0], snowObejct[i][1], snowObejct[i][2]);//위치
+		glutSolidSphere(2, 10, 10);
+		glPopMatrix();
+	}
+}
+
+void text()
+{
+	glPushMatrix();
+	glColor3f(1.0f, 1.0f, 0.0f);//색상
+	char *string = "Miro Miro";
+	glRasterPos2f(0.0, 0.0); // 문자 출력할 위치 설정
+	int len = (int)strlen(string);
+	for (int i = 0; i < len; i++)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
+	glPopMatrix();
+}
+
+void color()
+{
+	for (int i = 0; i<100; ++i)
+	{
+		snowColor[i][0] += 0.1;
+		if (snowColor[i][0]>1)
+		{
+			snowColor[i][0] = 0;
+			snowColor[i][1] += 0.1;
+		}
+		if (snowColor[i][1]>1)
+		{
+			snowColor[i][1] = 0;
+			snowColor[i][2] += 0.1;
+		}
+		if (snowColor[i][2]>1)
+			snowColor[i][2] = 0;
+	}
+}
+
+float end_textColor[100][3];
+
+void end_text()
+{
+	for (int i = 0; i < 100; ++i)
+	{
+		glPushMatrix();
+		glColor3f(end_textColor[i][0], end_textColor[i][1], end_textColor[i][2]);//색상
+		char *string = "Game Over";
+		glRasterPos2f(0.0, 0.0); // 문자 출력할 위치 설정
+		int len = (int)strlen(string);
+		for (int i = 0; i < len; i++)
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
+		glPopMatrix();
+	}
+}
+void end_color()
+{
+	for (int i = 0; i<100; ++i)
+	{
+		end_textColor[i][0] += 0.1;
+		if (end_textColor[i][0]>1)
+		{
+			end_textColor[i][0] = 0;
+			end_textColor[i][1] += 0.1;
+		}
+		if (end_textColor[i][1]>1)
+		{
+			end_textColor[i][1] = 0;
+			end_textColor[i][2] += 0.1;
+		}
+		if (end_textColor[i][2]>1)
+			end_textColor[i][2] = 0;
+	}
+}
+
+
+
 GLvoid drawScene(GLvoid);
 void drawTitle();
 void drawStage1();
@@ -120,6 +207,23 @@ GLvoid Keyboard(unsigned char key, int x, int y);
 GLvoid Mouse(int button, int state, int x, int y);
 GLvoid Timerfunction(int value);
 double getRadian(double _num);
+
+void load_title(){
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	srand((unsigned)time(NULL));
+	for (int i = 0; i<100; ++i)
+	{
+		//변수 = rnad()%(종료값-시작값+1)+시작값
+		snowObejct[i][0] = rand() % (300 - (-300) + 1) + (-300);//x값
+		snowObejct[i][1] = rand() % (300 - (-300) + 1) + (-300);//y값
+		snowObejct[i][2] = rand() % (300 - (-300) + 1) + (-300);//x값
+		snowColor[i][0] = rand() % 10 * 0.1;//r
+		snowColor[i][1] = rand() % 10 * 0.1;//g
+		snowColor[i][3] = rand() % 10 * 0.1;//b
+	}
+
+	cur_state = TITLE;
+}
 
 void load_statge1()
 {
@@ -251,9 +355,24 @@ void load_statge3()
 
 }
 
+void load_Finish(){
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	srand((unsigned)time(NULL));
+	for (int i = 0; i<100; ++i)
+	{
+		//변수 = rnad()%(종료값-시작값+1)+시작값
+		end_textColor[i][0] = rand() % 10 * 0.1;//r
+		end_textColor[i][1] = rand() % 10 * 0.1;//g
+		end_textColor[i][3] = rand() % 10 * 0.1;//b
+	}
+
+	cur_state = FINISH;
+}
+
 void initialize()
 {
-	load_statge1();
+	load_title();
 }
 
 
@@ -268,7 +387,7 @@ void main(int argc, char *argv[])
 	glutDisplayFunc(drawScene); // 출력 함수의 지정
 	glutKeyboardFunc(Keyboard); // 키보드 입력 함수의 지정
 	glutMouseFunc(Mouse); // 단순 마우스 입력 함수의 지정
-	glutTimerFunc(100, Timerfunction, 1); // 타이머 함수 설정
+	glutTimerFunc(200, Timerfunction, 1); // 타이머 함수 설정
 	glutReshapeFunc(Reshape); // 다시 그리기 함수의 지정 
 
 	initialize();
@@ -279,21 +398,15 @@ void main(int argc, char *argv[])
 // 윈도우 출력 함수
 GLvoid drawScene(GLvoid)
 {
-	if (cur_state == TITLE)
-	{
+	if (cur_state == TITLE) drawTitle();
 
-	}
 	if (cur_state == STAGE1) drawStage1();
 		
 	if (cur_state == STAGE2) drawStage2();
 
 	if (cur_state == STAGE3) drawStage3();
 
-	if (cur_state == FINISH)
-	{	
-		
-	}
-
+	if (cur_state == FINISH) drawFinish();
 
 	glPopMatrix();
 
@@ -302,6 +415,29 @@ GLvoid drawScene(GLvoid)
 	glutSwapBuffers();
 }
 
+void drawTitle(){
+
+	// 클리핑 변환 설정: 출력하고자 하는 공간 결정
+	// 아래 3줄은 투영을 설정하는 함수
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	// 원근 투영을 사용하는 경우:
+	gluPerspective(60.0, 1.0, 1.0, 1000.0);
+	glTranslatef(0.0, 0.0, -300.0);
+	// 모델 뷰 행렬 스택 재설정
+	glMatrixMode(GL_MODELVIEW);
+	// 관측 변환: 카메라의 위치 설정 (필요한 경우)
+	//gluLookAt (0.0, 0.0, 0.0,/**/ 0.0, 50.0,1.0, /**/ 0.0, 1.0, 0.0);
+	glLoadIdentity();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	snow();//눈
+	text();//글씨
+
+}
 
 void drawStage1()
 {
@@ -656,6 +792,30 @@ void drawStage3()
 
 }
 
+void drawFinish()
+{
+	// 클리핑 변환 설정: 출력하고자 하는 공간 결정
+	// 아래 3줄은 투영을 설정하는 함수
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	// 원근 투영을 사용하는 경우:
+	gluPerspective(60.0, 1.0, 1.0, 1000.0);
+	glTranslatef(0.0, 0.0, -300.0);
+	// 모델 뷰 행렬 스택 재설정
+	glMatrixMode(GL_MODELVIEW);
+	// 관측 변환: 카메라의 위치 설정 (필요한 경우)
+	//gluLookAt (0.0, 0.0, 0.0,/**/ 0.0, 50.0,1.0, /**/ 0.0, 1.0, 0.0);
+	glLoadIdentity();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	cout << "end" << endl;
+	end_text();//글씨
+
+}
+
 GLvoid Reshape(int w, int h)
 {
 
@@ -675,6 +835,9 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		Player1.Move(key);
 		change = Player1.ChangeViewPoint(key);
 	}
+
+	if (cur_state == TITLE)
+		load_statge1();
 
 	if (cur_state == STAGE1)
 	{
@@ -728,7 +891,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			}
 		}
 
-		if (Player1.CrushWithEndPoint(EndPoint1.returnHitBox())) {
+		if (Player1.CrushWithEndPoint(EndPoint2.returnHitBox())) {
 			load_statge3(); change = true;
 		}
 
@@ -756,6 +919,10 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 				change = true;
 				break;
 			}
+		}
+
+		if (Player1.CrushWithEndPoint(EndPoint3.returnHitBox())) {
+			load_Finish(); change = true;
 		}
 	}
 
@@ -805,8 +972,10 @@ GLvoid Mouse(int button, int state, int x, int y)
 
 void Timerfunction(int value)
 {
-
+	if (cur_state == TITLE)
+		color();
+	if (cur_state == FINISH)
+		end_color();
 	glutPostRedisplay(); // 화면 재 출력
-	glutTimerFunc(100, Timerfunction, 1); // 타이머함수 재 설정
+	glutTimerFunc(200, Timerfunction, 1); // 타이머함수 재 설정
 }
-
